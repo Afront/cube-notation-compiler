@@ -1,5 +1,6 @@
 # Cube Notation Compiler
 *Version 1.0*
+
 Cube Notation Compiler compiles the Extended Singmaster Notation for the Rubik's cube into a simpler notation. The Extended Singmaster Notation is further explained in [notation.md](notation.md). In the simplified notation, there are no parentheses, and a turn is always paired with the number of times the turn would be done. The grammar used for the lexer and the parser is in [grammar.md](grammar.md). This compiler is originally written for the Cubing Analysis and Testing Suite (cats).
 
 ## Known Issues and Possible Improvements
