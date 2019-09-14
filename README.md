@@ -9,7 +9,8 @@ Here are some current issues with the project:
   - Has not been refactored and optimized therefore it has a lot of code smell and can be made shorter (possibly down to 200 lines from 413 lines).
   - Can possibly skip and merge some steps like code optimization since the grammar is simple.
   - Uses Ruby, which might be an issue for some people due to it being an interpreted language.
-  - Determining the modularity/period of an algorithm can make the program faster.
+  - Determining the modularity/period of an algorithm can make the program compile faster.
+  - Has not been tested or validated fully yet
   
 ## Getting Started
 The compiler is originally written for software that doesn't use Ruby, so it requires an external file called '.input' that contains a string of moves. The output would be the simplified string of moves stored in the file '.output'. It is important to note that the program  deletes the input file afterwards. 
