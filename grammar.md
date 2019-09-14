@@ -9,18 +9,18 @@
 
 
 ##### Rule 1: Turn -> Move
-T -> t
-tS -> t
+- T -> t
+- tS -> t
 
 ##### Rule 2: Moves -> Sub-alg
-t -> a
-at -> a
+- t -> a
+- at -> a
 
 ##### Rule 3: Sub-alg ->  Alg block
-(a) -> b
-bS -> b
+- (a) -> b
+- bS -> b
 
 ##### Rule 4 Alg-block and Sub-alg -> Alg
-a -> A
-b -> A
-Aa -> A
+- a -> A
+- b -> A
+- Aa -> A
