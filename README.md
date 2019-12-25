@@ -1,16 +1,8 @@
 # Cube Notation Compiler
 *Version 1.0*
+Status for V2: Creating Parser (Hacked (S)LR Parser)
 
 This Ruby script compiles the Extended Singmaster Notation for the Rubik's cube into a simpler notation. The Extended Singmaster Notation is further explained in [notation.md](notation.md). In the simplified notation, there are no parentheses, and a turn is always paired with the number of times the turn would be done. The grammar used for the lexer and the parser is in [grammar.md](grammar.md). This compiler is originally written for the Cubing Analysis and Testing Suite (cats).
-
-## Update
-I decided to postpone V2.0 to Christmas as I'm planning on making at least 6 compilers with different lexer and parser combinations (Goal is 12). 
-
-| Lexer                       |  Done |  Parser | Done |
-|-------                      |-------|---------|------|
-| StringScanner (Regex-based) |  ✅  |        |      |
-| DFA-based Lexer             |  ✅  |         |      |
-|                             |       |         |      |
 
 ## Known Issues and Possible Improvements
 Here are some current issues with the project:
