@@ -1,0 +1,13 @@
+name: cube_notation_compiler
+version: 0.1.0
+
+authors:
+  - Afront <3943720+Afront@users.noreply.github.com>
+
+targets:
+  cube_notation_compiler:
+    main: src/cube_notation_compiler.cr
+
+crystal: 0.34.0
+
+license: MIT
