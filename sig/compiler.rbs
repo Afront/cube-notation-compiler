@@ -1,0 +1,107 @@
+# frozen_string_literal: true
+
+class Token
+  attr_accessor token: String
+  attr_accessor type: String
+
+  def initialize: (String, String) -> void
+end
+
+class TurnToken
+  attr_accessor token: String
+  attr_accessor symbol: Array[String]
+  attr_accessor type: String
+
+  def initialize: (String token, Array[String] symbol, String) -> void
+  def simplify_symbol: () -> Integer
+end
+
+class CodeTkn
+  attr_accessor turn: String
+  attr_accessor symbol: Array[String]
+
+  def initialize: (String turn, Array[String] symbol) -> void
+end
+
+
+class Char
+  attr_reader c: String
+
+  def initialize: (String c) -> void
+
+
+  def isTurn: () -> bool
+
+  def isSlice: () -> bool
+
+  def isWide: () -> bool
+
+  def isRotation: () -> bool
+
+  def isMove: () -> bool
+
+  def isSymbol: () -> bool
+
+  def isBracket: () -> bool
+
+  def is_valid_type: () -> bool
+
+  def find_type: () -> ('T' | 'S' | 'B' | nil)
+end
+
+class Lexer
+  attr_reader symbol_list: Array[Token]
+  def initialize: () -> void
+  def lex: () -> void
+end
+
+class Parser
+  attr_reader parse_stack: Array[Token]
+  def initialize: (Array[Token] symbol_list) -> void
+
+  def shift: (Token symbol) -> void
+
+  def rule_finder: (String string) -> ([Integer, Integer] | 0)
+
+  def rule1: () -> void
+  def rule2: () -> void
+  def rule3: () -> void
+
+  def reduce: () -> void
+
+  def accept: () -> void # should probably be NilClass?
+
+  def parse: () -> void
+end
+
+class CodeGenerator
+  attr_reader code: Array[CodeTkn]
+
+  def initialize: (Array[Token] parse_stack) -> void
+
+  def simplifyToken: (Token | TurnToken) -> (Array[CodeTkn])
+
+  def generate: () -> void
+end
+
+class CodeOptimizer
+  attr_reader optimized_code: Array[Array[String] | Array[Integer]]
+
+  def initialize: (Array[CodeTkn] generated_code) -> void
+
+  def optimize: () -> void
+end
+
+class TargetCodeGenerator
+  attr_reader target_code: String
+
+  def initialize: (Array[Array[String] | Array[Integer]] optimized_code) -> void
+
+  def generate: () -> void
+end
+
+class Interpreter
+  attr_reader final_code: String
+
+  def initialize: (?String text) -> void
+end
