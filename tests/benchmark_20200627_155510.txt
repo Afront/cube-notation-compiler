@@ -1,0 +1,21 @@
+       user     system      total        real
+vanilla  0.000072   0.000012   0.035276 (  0.042009)
+Parser+Lexer  0.000079   0.000014   0.781298 (  0.904015)
+Parser+Lexer  0.000075   0.000013   0.801033 (  0.817553)
+Whole Interpreter  0.000078   0.000013   0.800740 (  0.834509)
+Whole Interpreter  0.000081   0.000014   0.782280 (  0.863845)
+
+       user     system      total        real
+vanilla  0.000088   0.000014   0.036755 (  0.038915)
+Parser+Lexer  0.000095   0.000016   0.800729 (  0.869308)
+Parser+Lexer  0.000085   0.000014   0.817660 (  0.845723)
+Whole Interpreter  0.000086   0.000015   0.797575 (  0.849995)
+Whole Interpreter  0.000085   0.000014   0.838798 (  0.879745)
+
+       user     system      total        real
+vanilla  0.000105   0.000018   0.307590 (  0.320270)
+Parser+Lexer  0.000091   0.000015   1.068307 (  1.120699)
+Parser+Lexer  0.000106   0.000018   1.103053 (  1.275295)
+Whole Interpreter  0.000113   0.000019   1.081587 (  1.239085)
+Whole Interpreter  0.000086   0.000014   1.082790 (  1.164659)
+

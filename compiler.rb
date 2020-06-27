@@ -400,7 +400,7 @@ class TargetCodeGenerator
     generate
     @target_code = @target_code_a.join
     IO.write('.output', @target_code)
-#    File.delete('.input') if File.exist?('.input')
+    File.delete('.input') if File.exist?('.input')
   end
 
   def generate
@@ -424,4 +424,4 @@ class Interpreter
   end
 end
 
-i = Interpreter.new
+Interpreter.new if $PROGRAM_NAME == __FILE__

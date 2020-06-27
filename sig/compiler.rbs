@@ -51,7 +51,7 @@ end
 
 class Lexer
   attr_reader symbol_list: Array[Token]
-  def initialize: () -> void
+  def initialize: (String input) -> void
   def lex: () -> void
 end
 
