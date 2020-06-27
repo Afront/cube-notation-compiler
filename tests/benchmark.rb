@@ -19,6 +19,9 @@ Dir.entries('./benchmark_inputs').reject { |f| File.directory? f }.each do |file
     x.report('vanilla:') { `ruby ../compiler.rb` }
     p
     copy_to_input_file file
+    x.report('No test:') { `RBS_TEST_TARGET='Steep' ruby -r rbs/test/setup ../compiler.rb` }
+    p
+    copy_to_input_file file
     x.report('Lexer:') { `RBS_TEST_TARGET='Lexer' ruby -r rbs/test/setup ../compiler.rb` }
     p
     copy_to_input_file file
