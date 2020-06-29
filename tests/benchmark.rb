@@ -13,22 +13,17 @@ module RBSBenchmark
     CodeGenerator CodeOptimizer
     TargetCodeGenerator Interpreter
   ]
+  @@copy_to_input_file = ->(input_name) { FileUtils.cp("#{@@benchmark_dir}/#{input_name}", '.input') }
 
   class BenchmarkReportHelper
-    @@benchmark_dir = "#{__dir__}/benchmark_inputs"
-    @@benchmark_tmp_dir = "#{__dir__}/tmp/benchmark"
-
-    def initialize(file, benchmark)
+    def initialize(file, benchmark, copy_to_input_file_lambda)
       @file = file
       @benchmark = benchmark
-    end
-
-    def copy_to_input_file(input_name)
-      FileUtils.cp("#{@@benchmark_dir}/#{input_name}", '.input')
+      @copy_to_input_file = copy_to_input_file_lambda
     end
 
     def report(label)
-      copy_to_input_file @file
+      @copy_to_input_file.call @file
       @benchmark.report("#{label}:") { yield }
       p
     end
@@ -65,7 +60,7 @@ module RBSBenchmark
       puts file
       puts '-------------------------------------'
       Benchmark.bm do |x|
-        benchmark_reporter = BenchmarkReportHelper.new(file, x)
+        benchmark_reporter = BenchmarkReportHelper.new(file, x, @@copy_to_input_file)
         benchmark_reporter.report('Vanilla') { `ruby ../compiler.rb` }
         benchmark_reporter.report('No test') { execute_compiler(targets: ['Steep']) }
         benchmark_reporter.report('Lexer') { execute_compiler(targets: ['Lexer']) }
