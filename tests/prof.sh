@@ -30,8 +30,6 @@ then
 	print
 else
 	if [[ "$1" == "profile" ]]; then
-		echo "$1"
-		exit
 		profile
 		print
 	elif [[ "$1" == "print" ]]; then
