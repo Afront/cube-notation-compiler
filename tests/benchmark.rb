@@ -2,65 +2,87 @@
 
 require 'benchmark'
 require 'fileutils'
-# require_relative '../compiler'
+require 'open3'
 
-def copy_to_input_file(input_name)
-  FileUtils.cp("./benchmark_inputs/#{input_name}", '.input')
-end
+module RBSBenchmark
+  @@benchmark_dir = "#{__dir__}/benchmark_inputs"
+  @@benchmark_tmp_dir = "#{__dir__}/tmp/benchmark"
+  @@token_classes = %w[Token TurnToken CodeTkn Char]
+  @@interpreter_classes = %w[
+    Lexer Parser
+    CodeGenerator CodeOptimizer
+    TargetCodeGenerator Interpreter
+  ]
 
-$stdout = File.new("benchmark_#{Time.new.strftime('%Y%m%d_%H%M%S')}.txt", 'w')
-$stdout.sync = true
+  class BenchmarkReportHelper
+    @@benchmark_dir = "#{__dir__}/benchmark_inputs"
+    @@benchmark_tmp_dir = "#{__dir__}/tmp/benchmark"
 
-def execute_compiler(targets:)
-  env = {
-    'RBS_TEST_TARGET' => targets.join(','),
-    'RBS_TEST_OPT' => '-I../sig'
-  }
-
-  out, status = Open3.capture2e(env, 'ruby', '-rrbs/test/setup', '../compiler.rb')
-
-  warn out
-
-  raise unless status.success?
-end
-
-Dir.entries('./benchmark_inputs').reject { |f| File.directory? f }.each do |file|
-  puts file
-  puts '-------------------------------------'
-  Benchmark.bm do |x|
-    copy_to_input_file file
-    x.report('vanilla:') { `ruby ../compiler.rb` }
-    p
-    copy_to_input_file file
-    x.report('No test:') { execute_compiler(targets: ['Steep']) }
-    p
-    copy_to_input_file file
-    x.report('Lexer:') { execute_compiler(targets: ['Lexer']) }
-    p
-    copy_to_input_file file
-    x.report('Parser:') { execute_compiler(targets: %w[Parser]) }
-    p
-    copy_to_input_file file
-    x.report('Parser+Lexer:') { execute_compiler(targets: %w[Lexer Parser]) }
-    p
-    copy_to_input_file file
-    x.report('Whole Interpreter:') do
-      execute_compiler(targets: %w[Lexer Parser CodeGenerator CodeOptimizer TargetCodeGenerator Interpreter])
+    def initialize(file, benchmark)
+      @file = file
+      @benchmark = benchmark
     end
-    p
-    copy_to_input_file file
-    x.report('All classes:') do
-      execute_compiler(targets: %w[Token TurnToken CodeTkn Char Lexer Parser CodeGenerator CodeOptimizer TargetCodeGenerator Interpreter])
+
+    def copy_to_input_file(input_name)
+      FileUtils.cp("#{@@benchmark_dir}/#{input_name}", '.input')
+    end
+
+    def report(label)
+      copy_to_input_file @file
+      @benchmark.report("#{label}:") { yield }
+      p
     end
   end
-  puts "\n"
 
-  # puts `time ruby ../compiler.rb`
-  # Open3.popen3("") do |stdin, stdout, stderr, thread|
-  #  # pid = thread.pid
-  #  puts stdout.read.chomp
-  #  puts stderr.read.chomp
-  # end
+  module_function
+
+  def execute_compiler(targets:)
+    env = {
+      'RBS_TEST_TARGET' => targets.join(','),
+      'RBS_TEST_OPT' => '-I../sig'
+    }
+
+    out, status = Open3.capture2e(env, 'ruby', '-rrbs/test/setup', '../compiler.rb')
+    warn out
+    raise unless status.success?
+  end
+
+  def setup_path(path_name)
+    FileUtils.mkdir_p path_name unless Dir.exist? path_name
+  end
+
+  def setup_benchmark
+    setup_path @@benchmark_dir
+    setup_path @@benchmark_tmp_dir
+    $stdout = File.new("#{@@benchmark_tmp_dir}/benchmark_#{Time.new.strftime('%Y%m%d_%H%M%S')}.txt", 'w')
+    $stdout.sync = true
+  end
+
+  def run_benchmark
+    setup_benchmark
+
+    Dir.entries(@@benchmark_dir).reject { |f| File.directory? f }.each do |file|
+      puts file
+      puts '-------------------------------------'
+      Benchmark.bm do |x|
+        benchmark_reporter = BenchmarkReportHelper.new(file, x)
+        benchmark_reporter.report('Vanilla') { `ruby ../compiler.rb` }
+        benchmark_reporter.report('No test') { execute_compiler(targets: ['Steep']) }
+        benchmark_reporter.report('Lexer') { execute_compiler(targets: ['Lexer']) }
+        benchmark_reporter.report('Parser') { execute_compiler(targets: %w[Parser]) }
+        benchmark_reporter.report('Parser+Lexer') { execute_compiler(targets: %w[Lexer Parser]) }
+        benchmark_reporter.report('Whole Interpreter') do
+          execute_compiler(targets: @@interpreter_classes)
+        end
+        benchmark_reporter.report('All classes') do
+          execute_compiler(targets: @@interpreter_classes + @@token_classes)
+        end
+      end
+      puts "\n"
+    end
+
+    $stdout = STDOUT
+  end
 end
 
-$stdout = STDOUT
+RBSBenchmark.run_benchmark
