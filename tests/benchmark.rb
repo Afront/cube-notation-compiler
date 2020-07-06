@@ -37,7 +37,7 @@ module RBSBenchmark
       'RBS_TEST_OPT' => '-I../sig'
     }
 
-    out, status = Open3.capture2e(env, 'ruby', '-rrbs/test/setup', '../compiler.rb')
+    out, status = Open3.capture2e(env, 'ruby', '-rbundler/setup', '-rrbs/test/setup', '../compiler.rb')
     warn out
     raise unless status.success?
   end
