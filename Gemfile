@@ -1,4 +1,6 @@
 source 'https://rubygems.org'
 
-gem "rbs", path: "../../new/newer/rbs"
-gem 'stackprof'
+group :test, :optional => true do
+	gem "rbs", path: "../../rbs", :group => :test
+	gem 'stackprof', :group => :test
+end

@@ -5,8 +5,6 @@ require 'open3'
 
 module QuickTest
   @benchmark_dir = "#{__dir__}/benchmark_inputs"
-  @benchmark_tmp_dir = "#{__dir__}/tmp/benchmark"
-  @token_classes = %w[Token TurnToken CodeTkn Char]
   @interpreter_classes = %w[
     Lexer Parser
     CodeGenerator CodeOptimizer
