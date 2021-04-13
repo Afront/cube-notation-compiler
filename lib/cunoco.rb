@@ -46,6 +46,6 @@ module Cunoco
 
   if $PROGRAM_NAME == __FILE__ 
     raise ArgumentError, "Not enough arguments!" if ARGV.size != 1
-    puts 1compile(File.read(ARGV.first))
+    puts compile(File.read(ARGV.first))
   end
 end
